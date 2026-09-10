@@ -1,0 +1,10 @@
+# Supabase migrations directory.
+#
+# Migrations are applied in ascending version order and recorded in
+# supabase_migrations.schema_migrations (R1.23). Each migration runs in a single
+# transaction so a mid-migration failure rolls back entirely and registers no
+# version (R1.20). Write DDL idempotently (IF NOT EXISTS / CREATE OR REPLACE) so
+# applying the set twice equals applying it once (P9).
+#
+# The baseline schema, RLS policies, triggers, and RPC functions arrive in the
+# Tenancy & RLS phase (README Phase 9), not in this scaffold.

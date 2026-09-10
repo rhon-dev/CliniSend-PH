@@ -1,0 +1,19 @@
+{
+  "name": "clinisend-ph",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CliniSend PH — multi-tenant SMS appointment reminder platform for Philippine clinics",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "audit:ci": "npm audit --audit-level=high"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

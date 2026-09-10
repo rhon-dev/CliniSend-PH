@@ -1,0 +1,62 @@
+# CliniSend PH — Supabase local configuration
+# Docs: https://supabase.com/docs/guides/local-development/cli/config
+#
+# `project_id` is a local identifier for the Supabase CLI. It is NOT the linked
+# remote project ref — that is stored in supabase/.temp/ after `supabase link`
+# and is never committed.
+project_id = "clinisend-ph"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "app"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[db.migrations]
+# Migrations are applied in ascending version order (R1.23).
+schema_paths = []
+
+[studio]
+enabled = true
+port = 54323
+
+[inbucket]
+# Local email testing for auth/invitation flows during development.
+enabled = true
+port = 54324
+
+[auth]
+enabled = true
+# The site URL and redirect allowlist are environment-specific; staging and
+# production override these (R14.10, R14.12). Values below are local defaults.
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173"]
+# JWT access token lifetime. Short-lived so a revoked session's access token
+# stops working quickly (design 4.4).
+jwt_expiry = 1800
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+# Staff self-registration is not allowed for Doctor/Receptionist/Super Admin;
+# clinic admin signup goes through the Registration_Service, not Supabase signup.
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+enable_confirmations = false
+# Password length is enforced at the application layer (12-72, R3.1). Supabase
+# minimum is a floor only.
+[auth.sessions]
+# Absolute session lifetime (R3.10) and inactivity expiry (R3.10, R3.15).
+# Go duration strings. Supabase maps these to GOTRUE_SESSIONS_TIMEBOX and
+# GOTRUE_SESSIONS_INACTIVITY_TIMEOUT.
+timebox = "12h"
+inactivity_timeout = "60m"
+
+[edge_runtime]
+enabled = true

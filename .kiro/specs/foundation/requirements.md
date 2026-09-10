@@ -2,13 +2,13 @@
 
 ## Introduction
 
-This specification covers **Phase 1 (Foundation)** of CliniSend PH, a multi-tenant SMS appointment reminder platform for Philippine clinics. Foundation delivers the base on which every later phase builds: the Supabase Postgres schema for all baseline tables, Row-Level Security policies that enforce tenant isolation at the database layer, staff authentication for the four staff roles via Supabase Auth, the role-based permission model, and the clinic self-registration and Super Admin approval lifecycle.
+This specification covers **Foundation** of CliniSend PH, a multi-tenant SMS appointment reminder platform for Philippine clinics. In the project README Section 22 — the declared plan of record — Foundation spans **phases 8 through 12**: Foundation Implementation (8), Tenancy & RLS (9), Staff Authentication & Roles (10), Clinic Registration & Approval Lifecycle (11), and Clinic Profile & Staff Provisioning (12). All phase numbers in this document refer to README Section 22. Foundation delivers the base on which every later phase builds: the Supabase Postgres schema for all baseline tables, Row-Level Security policies that enforce tenant isolation at the database layer, staff authentication for the four staff roles via Supabase Auth, the role-based permission model, and the clinic self-registration and Super Admin approval lifecycle.
 
 The full baseline schema (including `patients`, `appointments`, `templates`, and `messages`) is created in this phase so later phases add behavior rather than restructure storage. The user-facing features that operate on those tables — patient and appointment management, message templates, Semaphore SMS integration, the reminder scheduler, the inbound SMS webhook, the patient OTP portal, and reporting views — are explicitly **out of scope** for this specification. The permission model for those features is defined here because Foundation owns the authorization layer that guards them.
 
 Fixed technology decisions for this phase: React (Vite) frontend, Node.js + Express backend, Supabase (Postgres + Row-Level Security + Supabase Auth), deployment on Vercel (frontend) and Railway or Render (backend). All date and time logic is expressed in Philippine Standard Time.
 
-**Out of scope for this specification:** patient and appointment management interfaces (Phase 2), template management interface and Semaphore outbound SMS and the `pg_cron` reminder scheduler and delivery log (Phase 3), inbound SMS webhook and keyword parsing and ambiguity flagging (Phase 4), patient OTP portal (Phase 5), reporting views (Phase 6), hardening test suites (Phase 7), staging deployment (Phase 8), and all items listed as excluded from the MVP in the project README Section 6.2 (subscription billing, multiple SMS provider fallback, native mobile application, electronic medical records, multi-branch per clinic, calendar synchronization, email fallback channel, advanced analytics, white-labeling, and formal RA 10173 compliance documentation).
+**Out of scope for this specification** (README Section 22 phase in parentheses): patient and appointment management interfaces (Phase 13), template management interface and Semaphore outbound SMS and the `pg_cron` reminder scheduler and delivery log (Phases 14–15), inbound SMS webhook and keyword parsing and ambiguity flagging (Phase 16), patient OTP portal (Phase 17), reporting views (Phase 18), hardening test suites (Phases 19–20), staging deployment (Phase 21), and all items listed as excluded from the MVP in the project README Section 6.2 (subscription billing, multiple SMS provider fallback, native mobile application, electronic medical records, multi-branch per clinic, calendar synchronization, email fallback channel, advanced analytics, white-labeling, and formal RA 10173 compliance documentation).
 
 ## Glossary
 
@@ -21,7 +21,7 @@ Fixed technology decisions for this phase: React (Vite) frontend, Node.js + Expr
 - **RLS policy**: A single named database rule attached to one table that defines the row-visibility or row-write condition for a given operation.
 - **Philippine Standard Time (PHT)**: The UTC+8 timezone used for all clinic-facing date and time values in CliniSend PH.
 - **Privileged action**: An action that changes clinic lifecycle status or staff account existence or status. Privileged actions are: clinic approval, clinic rejection, clinic suspension, clinic reactivation, staff account creation, staff account deactivation, and staff account reactivation.
-- **Ambiguous inbound message**: An inbound `messages` row whose `requires_review` value is true because the sending phone number matched more than one pending appointment. The `requires_review` flag is set in Phase 4 and is resolved by a Receptionist, who sets `review_resolved_at` and `review_resolved_by_user_id`. Foundation creates the columns and the permission rules; the matching logic is delivered in Phase 4.
+- **Ambiguous inbound message**: An inbound `messages` row whose `requires_review` value is true because the sending phone number matched more than one pending appointment. The `requires_review` flag is set in Phase 16 and is resolved by a Receptionist, who sets `review_resolved_at` and `review_resolved_by_user_id`. Foundation creates the columns and the permission rules; the matching logic is delivered in Phase 16.
 - **Migration version registry**: The table in the Database_Layer that records the version identifier and application time of each successfully applied migration, and against which the Migration_System determines which migrations are pending.
 
 ### Clinic Statuses
@@ -38,7 +38,7 @@ Fixed technology decisions for this phase: React (Vite) frontend, Node.js + Expr
 - **Doctor**: Clinical staff of one clinic. A Doctor is a `clinic_users` row with role `doctor`.
 - **Receptionist**: Front-desk staff of one clinic. A Receptionist is a `clinic_users` row with role `receptionist`.
 - **Staff account**: Any account with the role Super Admin, Clinic Admin, Doctor, or Receptionist. Staff accounts authenticate with email and password. Staff passwords are 12 to 72 characters.
-- **Patient**: A person who receives appointment reminders. A Patient is a `patients` row and is **not** a staff account, holds no password, and is not part of the staff authentication system. A Patient's mobile number is stored in the 11-digit `09` form, and each mobile number is unique within one clinic. Patient authentication is delivered in Phase 5 and is outside this specification.
+- **Patient**: A person who receives appointment reminders. A Patient is a `patients` row and is **not** a staff account, holds no password, and is not part of the staff authentication system. A Patient's mobile number is stored in the 11-digit `09` form, and each mobile number is unique within one clinic. Patient authentication is delivered in Phase 17 and is outside this specification.
 
 ### Appointment Statuses
 
@@ -70,7 +70,7 @@ The `appointments.status` column accepts exactly these seven values, defined her
 
 ### Requirement 1: Baseline Database Schema
 
-**User Story:** As the platform owner, I want the complete baseline schema created in Phase 1, so that later phases add behavior without restructuring storage.
+**User Story:** As the platform owner, I want the complete baseline schema created in Foundation, so that later phases add behavior without restructuring storage.
 
 #### Acceptance Criteria
 
@@ -337,7 +337,7 @@ The `appointments.status` column accepts exactly these seven values, defined her
 
 ### Requirement 14: Security Baseline
 
-**User Story:** As the platform owner, I want baseline security practices in place from Phase 1, so that later phases build on a safe foundation instead of retrofitting one.
+**User Story:** As the platform owner, I want baseline security practices in place from Foundation, so that later phases build on a safe foundation instead of retrofitting one.
 
 #### Acceptance Criteria
 

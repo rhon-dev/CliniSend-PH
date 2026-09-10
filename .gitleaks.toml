@@ -1,0 +1,13 @@
+# Gitleaks configuration for CliniSend PH.
+# Extends the default ruleset (R14.4 — fail CI on a credential pattern in any
+# tracked file).
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Template files that contain variable NAMES only, never values."
+paths = [
+  '''backend/\.env\.example''',
+  '''frontend/\.env\.example''',
+]
