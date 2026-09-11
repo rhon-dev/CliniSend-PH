@@ -66,7 +66,9 @@ Repo scaffold, Supabase project, migration pipeline, `/health`, CI, env config, 
 - [ ] 8.10 Verify the Phase 8 gate end to end
   - CI green on a pushed branch; `/health` reachable on a deployed backend; a trivial forward + rollback migration proves the pipeline both directions
   - Migration pipeline proven locally (`supabase/migrations/20260910153535_pipeline_probe.sql` + `.down.sql`): forward apply in one transaction with registry record, re-apply no-op (R1.19), rollback drops the probe schema and registry entry, and mid-migration failure aborts the whole transaction leaving nothing behind (R1.20). Verified against a local Postgres container since the full Supabase stack images could not be pulled on this network.
-  - Still open (external): CI green on a pushed branch (needs push/PR to `main`); `/health` reachable on a deployed backend (needs a deploy — Phase 21).
+  - CI configured and valid: PR #1 (`foundation-scaffold` → `main`) opens correctly and the `pull_request` trigger fires. All local equivalents (typecheck, lint, test, build) are green.
+  - **[EXTERNALLY BLOCKED] CI green on a pushed branch.** Every hosted run is refused before any step executes with "the job was not started because your account is locked due to a billing issue." This is a GitHub account-level hold, not a code, workflow, or usage problem: billing shows $0 with no past-due on the Free plan, the repo is public (free unlimited Actions), and the primary email is verified. Re-ran CI four times (runs `34554948025`, `34555930433`, plus two reruns) — identical account-lock refusal each time. Resolution requires a GitHub Support ticket to lift the account hold; tracked as an owner action. Re-run `gh run rerun 34555930433` once the hold is lifted to confirm green.
+  - Still open (external): `/health` reachable on a deployed backend (needs a deploy — Phase 21).
   - _Requirements: R1.19, R1.20, R1.23; P9_
 
 ---
