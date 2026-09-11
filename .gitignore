@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+dist/
+build/
+**/dist/
+**/build/
+*.tsbuildinfo
+
+# Environment / secrets — never commit these (R14.3, R14.4)
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Supabase local state
+supabase/.branches/
+supabase/.temp/
+supabase/.env
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# Test / coverage artifacts
+coverage/
+**/coverage/
+.vitest/
+
+# Editor / OS
+.DS_Store
+.idea/
+*.swp

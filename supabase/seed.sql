@@ -1,0 +1,11 @@
+-- CliniSend PH — seed placeholder
+--
+-- The development seed routine (R15) creates Demo Clinic, Demo Clinic Two, and
+-- Pending Demo Clinic with one account per role, reading each password from a
+-- designated environment variable. That routine is environment-gated (local or
+-- staging only, never production — R15.4, R15.5) and creates Supabase Auth users,
+-- which raw SQL cannot do. It is therefore implemented as an application script
+-- in a later phase, not in this file.
+--
+-- This file is intentionally empty so `supabase db reset` has a no-op seed step
+-- until the schema and seed routine exist.
