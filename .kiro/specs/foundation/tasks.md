@@ -65,6 +65,8 @@ Repo scaffold, Supabase project, migration pipeline, `/health`, CI, env config, 
 
 - [ ] 8.10 Verify the Phase 8 gate end to end
   - CI green on a pushed branch; `/health` reachable on a deployed backend; a trivial forward + rollback migration proves the pipeline both directions
+  - Migration pipeline proven locally (`supabase/migrations/20260910153535_pipeline_probe.sql` + `.down.sql`): forward apply in one transaction with registry record, re-apply no-op (R1.19), rollback drops the probe schema and registry entry, and mid-migration failure aborts the whole transaction leaving nothing behind (R1.20). Verified against a local Postgres container since the full Supabase stack images could not be pulled on this network.
+  - Still open (external): CI green on a pushed branch (needs push/PR to `main`); `/health` reachable on a deployed backend (needs a deploy — Phase 21).
   - _Requirements: R1.19, R1.20, R1.23; P9_
 
 ---
